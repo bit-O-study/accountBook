@@ -1,0 +1,7 @@
+{
+  "name": "accountBook",
+  "port": 4104,
+  "app": ".",
+  "kind": "next",
+  "user": "bito_account"
+}

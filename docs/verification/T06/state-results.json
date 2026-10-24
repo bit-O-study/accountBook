@@ -1,0 +1,6 @@
+{
+  "empty": true,
+  "globalError": true,
+  "retryRecovery": true,
+  "scope": "Temporary copied databases only"
+}

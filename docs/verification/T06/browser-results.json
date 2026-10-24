@@ -1,0 +1,68 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "side": "flex",
+      "tabs": "none",
+      "sizes": [
+        34,
+        20,
+        20,
+        20
+      ]
+    },
+    {
+      "width": 901,
+      "scroll": 901,
+      "side": "flex",
+      "tabs": "none",
+      "sizes": [
+        27.03,
+        20,
+        20,
+        20
+      ]
+    },
+    {
+      "width": 900,
+      "scroll": 900,
+      "side": "none",
+      "tabs": "grid",
+      "sizes": [
+        27,
+        20,
+        20,
+        20
+      ]
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "side": "none",
+      "tabs": "grid",
+      "sizes": [
+        26,
+        18,
+        18,
+        18
+      ]
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "side": "none",
+      "tabs": "grid",
+      "sizes": [
+        26,
+        18,
+        18,
+        18
+      ]
+    },
+    {
+      "previousMonth": "http://127.0.0.1:3199/?month=2026-09"
+    }
+  ],
+  "pageErrors": []
+}
