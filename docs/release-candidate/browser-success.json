@@ -1,0 +1,555 @@
+{
+  "checkedAt": "2026-10-26T05:34:30.666Z",
+  "standalone": true,
+  "next": "15.5.28",
+  "port": 4428,
+  "syntheticDatabaseOnly": true,
+  "signupLoginLogout": true,
+  "ownerIsolation": true,
+  "installmentsAndRefunds": true,
+  "forgedIdBlocked": true,
+  "claim": true,
+  "secureCookie": true,
+  "browserLocalhostExceptionOnly": true,
+  "fontRequestsAborted": false,
+  "network": [
+    {
+      "event": "font-request",
+      "at": 1792992864395,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864398,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864520,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864520,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864596,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864596,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864631,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864631,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864673,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864673,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864707,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864707,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864754,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864754,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864781,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864781,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864826,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864826,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864862,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864862,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864901,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864902,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864932,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864932,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992864981,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992864981,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992865016,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992865016,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992865058,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992865058,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992865090,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992865090,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992865125,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992865125,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992865160,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992865160,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992865266,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992865266,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992865423,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992865423,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992865995,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992865995,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "request",
+      "at": 1792992866002,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "response",
+      "at": 1792992866066,
+      "status": 200,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "request",
+      "at": 1792992866686,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "response",
+      "at": 1792992866706,
+      "status": 200,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992866812,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992866812,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992867259,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992867259,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "request",
+      "at": 1792992867265,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "response",
+      "at": 1792992867292,
+      "status": 200,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "finished",
+      "at": 1792992867292,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "request",
+      "at": 1792992867939,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "response",
+      "at": 1792992867977,
+      "status": 200,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992868079,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992868079,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "request",
+      "at": 1792992868099,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "response",
+      "at": 1792992868133,
+      "status": 200,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "finished",
+      "at": 1792992868134,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992868196,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992868197,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992868290,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992868290,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992868373,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992868373,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992868471,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992868471,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992868554,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992868554,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "request",
+      "at": 1792992868558,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "response",
+      "at": 1792992868589,
+      "status": 200,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "finished",
+      "at": 1792992868590,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992868848,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992868848,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992868928,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992868928,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992869156,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992869157,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992869203,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992869203,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992869936,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992869936,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992869970,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992869970,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992870012,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992870013,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992870054,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992870054,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992870105,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992870105,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992870547,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992870547,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "request",
+      "at": 1792992870558,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "response",
+      "at": 1792992870572,
+      "status": 200,
+      "url": "http://localhost:4428/transactions"
+    },
+    {
+      "event": "font-request",
+      "at": 1792992870641,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    },
+    {
+      "event": "font-failed",
+      "at": 1792992870641,
+      "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
+      "failure": "net::ERR_NETWORK_ACCESS_DENIED"
+    },
+    {
+      "event": "request",
+      "at": 1792992870654,
+      "url": "http://localhost:4428/transactions"
+    }
+  ],
+  "pageErrors": []
+}

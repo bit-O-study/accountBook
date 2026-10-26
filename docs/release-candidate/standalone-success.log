@@ -1,0 +1,37 @@
+   ▲ Next.js 15.5.28
+   - Local:        http://127.0.0.1:4428
+   - Network:      http://127.0.0.1:4428
+
+ ✓ Starting...
+[sync] 자동 동기화 켜짐: 1800초마다
+ ✓ Ready in 444ms
+{"trace":"start","id":1,"action":"syncIfStaleAction"}
+{"trace":"finish","id":1,"action":"syncIfStaleAction","ms":67,"status":200,"bytes":77}
+{"trace":"close","id":1,"action":"syncIfStaleAction","ms":67,"finished":true,"bytes":77}
+{"trace":"start","id":2,"action":"addTransactionAction"}
+{"trace":"finish","id":2,"action":"addTransactionAction","ms":28,"status":200,"bytes":4320}
+{"trace":"close","id":2,"action":"addTransactionAction","ms":28,"finished":true,"bytes":4320}
+{"trace":"start","id":3,"action":"syncIfStaleAction"}
+{"trace":"finish","id":3,"action":"syncIfStaleAction","ms":28,"status":200,"bytes":77}
+{"trace":"close","id":3,"action":"syncIfStaleAction","ms":28,"finished":true,"bytes":77}
+{"trace":"start","id":4,"action":"addTransactionAction"}
+{"trace":"finish","id":4,"action":"addTransactionAction","ms":52,"status":200,"bytes":4321}
+{"trace":"close","id":4,"action":"addTransactionAction","ms":52,"finished":true,"bytes":4321}
+{"trace":"start","id":5,"action":"syncIfStaleAction"}
+{"trace":"finish","id":5,"action":"syncIfStaleAction","ms":33,"status":200,"bytes":77}
+{"trace":"close","id":5,"action":"syncIfStaleAction","ms":33,"finished":true,"bytes":77}
+{"trace":"start","id":6,"action":"syncIfStaleAction"}
+{"trace":"finish","id":6,"action":"syncIfStaleAction","ms":30,"status":200,"bytes":77}
+{"trace":"close","id":6,"action":"syncIfStaleAction","ms":30,"finished":true,"bytes":77}
+{"trace":"start","id":7,"action":"updateTransactionAction"}
+{"trace":"finish","id":7,"action":"updateTransactionAction","ms":37,"status":200,"bytes":4395}
+{"trace":"close","id":7,"action":"updateTransactionAction","ms":37,"finished":true,"bytes":4395}
+{"trace":"start","id":8,"action":"syncIfStaleAction"}
+{"trace":"finish","id":8,"action":"syncIfStaleAction","ms":35,"status":200,"bytes":77}
+{"trace":"close","id":8,"action":"syncIfStaleAction","ms":35,"finished":true,"bytes":77}
+{"trace":"start","id":9,"action":"syncIfStaleAction"}
+{"trace":"finish","id":9,"action":"syncIfStaleAction","ms":21,"status":200,"bytes":77}
+{"trace":"close","id":9,"action":"syncIfStaleAction","ms":21,"finished":true,"bytes":77}
+{"trace":"start","id":10,"action":"syncIfStaleAction"}
+{"trace":"finish","id":10,"action":"syncIfStaleAction","ms":28,"status":200,"bytes":77}
+{"trace":"close","id":10,"action":"syncIfStaleAction","ms":28,"finished":true,"bytes":77}

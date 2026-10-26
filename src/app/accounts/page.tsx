@@ -3,31 +3,18 @@ import { ActionButton } from "@/components/buttons";
 import { ConnectAccount, DisconnectAccount } from "@/components/ConnectAccount";
 import { CsvImport } from "@/components/CsvImport";
 import { Icon } from "@/components/Icon";
-import { getUser, prisma } from "@/lib/db";
-import { kstDateStr, kstTimeStr, monthRange, shortDate, todayStr } from "@/lib/dates";
+import { getUser, loadAccounts, loadAccountCounts } from "@/lib/server/data";
+import { todayStr } from "@/lib/dates";
+import { SyncTime } from "@/components/SyncTime";
 import { DEMO_INSTITUTIONS } from "@/lib/sync/providers";
 
 const STATUS_LABEL: Record<string, string> = { OK: "정상", SYNCING: "동기화 중", REAUTH: "재인증 필요", ERROR: "오류" };
 
-function lastSyncText(d: Date | null): string {
-  if (!d) return "아직 가져온 적 없음";
-  const min = Math.floor((Date.now() - d.getTime()) / 60000);
-  if (min < 1) return "방금 동기화";
-  if (min < 60) return `${min}분 전 동기화`;
-  return `${shortDate(kstDateStr(d))} ${kstTimeStr(d)} 동기화`;
-}
-
 export default async function AccountsPage() {
   const user = await getUser();
-  const r = monthRange(todayStr().slice(0, 7));
-  const [accounts, counts, csvCount] = await Promise.all([
-    prisma.linkedAccount.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
-    prisma.transaction.groupBy({
-      by: ["accountId"],
-      where: { userId: user.id, occurredAt: { gte: r.start, lt: r.end }, NOT: { amount: 0 } },
-      _count: true,
-    }),
-    prisma.transaction.count({ where: { userId: user.id, source: "CSV" } }),
+  const [accounts, { counts, csvCount }] = await Promise.all([
+    loadAccounts(user.id),
+    loadAccountCounts(user.id, todayStr().slice(0, 7)),
   ]);
   const countOf = new Map(counts.map((c) => [c.accountId, c._count]));
   const connected = new Set(accounts.map((a) => a.name));
@@ -58,7 +45,7 @@ export default async function AccountsPage() {
                 <span className="nm">
                   <b>{a.name}</b>
                   <small>
-                    {a.kind === "CARD" ? "카드" : "계좌"} · {lastSyncText(a.lastSyncedAt)}
+                    {a.kind === "CARD" ? "카드" : "계좌"} · <SyncTime at={a.lastSyncedAt?.toISOString() ?? null} suffix=" 동기화" empty="아직 가져온 적 없음" />
                   </small>
                 </span>
                 <span className={`pill ${a.syncStatus}`}>{STATUS_LABEL[a.syncStatus] ?? a.syncStatus}</span>

@@ -1,0 +1,159 @@
+// 가계부 데이터 모델 (설계 검수보고서 AB-DR-001 6장)
+// 로컬 개발은 SQLite, 운영은 provider 를 "postgresql" 로 바꿔 사용한다.
+// 금액은 원 단위 정수(Int). 지출은 음수, 수입은 양수.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String               @id @default(cuid())
+  name          String
+  createdAt     DateTime             @default(now())
+  accounts      LinkedAccount[]
+  transactions  Transaction[]
+  rules         RecurringRule[]
+  categoryRules CategoryRule[]
+  budgets       Budget[]
+  dismissals    RecurringDismissal[]
+  notifications Notification[]
+}
+
+model LinkedAccount {
+  id             String        @id @default(cuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider       String // 연동사 키 (demo, codef ...)
+  name           String // 신한카드, 국민은행 ...
+  kind           String // CARD | BANK
+  tokenEnc       String? // 연동사 인증 토큰 (암호화 저장)
+  providerConfig String        @default("")
+  syncStatus     String        @default("OK") // OK | SYNCING | REAUTH | ERROR
+  lastSyncedAt   DateTime?
+  lastError      String?
+  failCount      Int           @default(0)
+  createdAt      DateTime      @default(now())
+  transactions   Transaction[]
+}
+
+model Category {
+  id           String          @id @default(cuid())
+  name         String          @unique
+  kind         String // EXPENSE | INCOME | TRANSFER
+  sortOrder    Int             @default(0)
+  transactions Transaction[]
+  rules        CategoryRule[]
+  recurring    RecurringRule[]
+}
+
+model Transaction {
+  id           String               @id @default(cuid())
+  userId       String
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId    String?
+  account      LinkedAccount?       @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  externalId   String?
+  occurredAt   DateTime
+  amount       Int
+  kind         String // EXPENSE | INCOME | TRANSFER | CARD_BILL
+  merchantRaw  String
+  merchantNorm String
+  categoryId   String?
+  category     Category?            @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  source       String // AUTO | MANUAL | CSV
+  status       String               @default("APPROVED") // APPROVED | CANCELED
+  memo         String?
+  excluded     Boolean              @default(false)
+  mcc          String?
+  createdAt    DateTime             @default(now())
+  occurrence   RecurringOccurrence?
+
+  @@unique([accountId, externalId])
+  @@index([userId, occurredAt])
+  @@index([userId, merchantNorm])
+}
+
+model CategoryRule {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merchantNorm String
+  categoryId   String
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, merchantNorm])
+}
+
+model RecurringRule {
+  id           String                @id @default(cuid())
+  userId       String
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  amount       Int // 양수, 예상 결제 금액
+  amountMin    Int? // 변동형(공과금) 하한
+  amountMax    Int? // 변동형 상한
+  cycle        String // WEEKLY | MONTHLY | YEARLY
+  dueDay       Int // MONTHLY/YEARLY: 1~31, WEEKLY: 0(일)~6(토)
+  dueMonth     Int? // YEARLY: 1~12
+  merchantNorm String?
+  categoryId   String?
+  category     Category?             @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  payment      String? // 결제수단 표시용
+  notifyDays   String                @default("3,1")
+  startDate    String // YYYY-MM-DD (KST)
+  endDate      String?
+  paused       Boolean               @default(false)
+  createdAt    DateTime              @default(now())
+  occurrences  RecurringOccurrence[]
+}
+
+model RecurringOccurrence {
+  id            String        @id @default(cuid())
+  ruleId        String
+  rule          RecurringRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  dueDate       String // YYYY-MM-DD (KST)
+  status        String // SCHEDULED | PAID | CHANGED | MISSING
+  transactionId String?       @unique
+  transaction   Transaction?  @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  matchedAmount Int?
+
+  @@unique([ruleId, dueDate])
+}
+
+model RecurringDismissal {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merchantNorm String
+  until        String // YYYY-MM-DD
+
+  @@unique([userId, merchantNorm])
+}
+
+model Budget {
+  id           String @id @default(cuid())
+  userId       String
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  month        String // YYYY-MM
+  livingAmount Int // 생활비 예산 (고정지출 제외)
+
+  @@unique([userId, month])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key       String    @unique // 같은 알림 중복 발송 방지
+  type      String // DUE | CHANGED | MISSING | SUGGEST | SYNC_FAIL | BUDGET
+  title     String
+  body      String
+  href      String?
+  createdAt DateTime  @default(now())
+  readAt    DateTime?
+}

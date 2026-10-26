@@ -8,11 +8,11 @@ import { Icon } from "@/components/Icon";
 import { MonthSwitcher } from "@/components/MonthSwitcher";
 import { Suggestions } from "@/components/Suggestions";
 import { TxList } from "@/components/TxList";
-import { categoryMaps, getUser, prisma } from "@/lib/db";
+import { categoryMaps, getUser, loadAccounts, loadUnread } from "@/lib/server/data";
 import { isValidMonthKey, kstDateStr, relativeDue, shortDate, todayStr } from "@/lib/dates";
 import { signedWon, won } from "@/lib/money";
 import { loadMonthSummary } from "@/lib/queries";
-import { getSuggestions } from "@/lib/recurring/service";
+import { getSuggestions } from "@/lib/server/data";
 import styles from "./dashboard.module.css";
 
 const STATUS_LABEL: Record<string, string> = { PAID: "납부완료", SCHEDULED: "예정", CHANGED: "금액변동", MISSING: "미확인" };
@@ -28,9 +28,9 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   const [{ txs, occurrences, summary: s }, suggestions, accounts, cats, unread] = await Promise.all([
     loadMonthSummary(user.id, month, today),
     getSuggestions(user.id, today),
-    prisma.linkedAccount.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
+    loadAccounts(user.id),
     categoryMaps(),
-    prisma.notification.count({ where: { userId: user.id, readAt: null } }),
+    loadUnread(user.id),
   ]);
   const categories = cats.list.map((c) => ({ id: c.id, name: c.name, kind: c.kind }));
   const broken = accounts.filter((a) => a.syncStatus === "REAUTH" || a.syncStatus === "ERROR");

@@ -6,11 +6,10 @@ export const prisma = g.prisma ?? new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") g.prisma = prisma;
 
-/** 1단계는 1인 사용. 로그인(G-01) 붙이면 세션의 사용자로 바꾼다. */
+/** 화면과 서버 액션은 항상 요청 세션의 사용자만 사용한다. */
 export async function getUser() {
-  const user = await prisma.user.findFirst({ orderBy: { createdAt: "asc" } });
-  if (user) return user;
-  return prisma.user.create({ data: { name: "나" } });
+  const { requireUser } = await import("./auth/request");
+  return requireUser();
 }
 
 export async function categoryMaps() {

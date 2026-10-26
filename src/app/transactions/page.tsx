@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { TransactionOverlay } from "@/components/TransactionOverlay";
+import { query } from "@/lib/server/gateway";
 import { AddTransaction } from "@/components/AddTransaction";
 import { Icon } from "@/components/Icon";
 import { MonthSwitcher } from "@/components/MonthSwitcher";
 import { TxList } from "@/components/TxList";
-import { categoryMaps, getUser } from "@/lib/db";
+import { categoryMaps, getUser } from "@/lib/server/data";
 import { isValidMonthKey, todayStr } from "@/lib/dates";
 import { won } from "@/lib/money";
 import { loadTransactions, type TxView } from "@/lib/queries";
@@ -32,7 +34,7 @@ function applyFilter(txs: TxView[], filter: FilterKey, q: string): TxView[] {
 export default async function TransactionsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ month?: string; filter?: string; q?: string }>;
+  searchParams: Promise<{ month?: string; filter?: string; q?: string; tx?: string }>;
 }) {
   const sp = await searchParams;
   const today = todayStr();
@@ -43,6 +45,7 @@ export default async function TransactionsPage({
 
   const user = await getUser();
   const [all, cats] = await Promise.all([loadTransactions(user.id, month), categoryMaps()]);
+  const detail = typeof sp.tx === "string" && /^[A-Za-z0-9_-]{1,128}$/.test(sp.tx) ? await query("loadTransaction", { id: sp.tx }) : null;
   const categories = cats.list.map((c) => ({ id: c.id, name: c.name, kind: c.kind }));
   const txs = applyFilter(all, filter, q);
 
@@ -61,9 +64,12 @@ export default async function TransactionsPage({
 
   return (
     <div className="page">
+      {sp.tx !== undefined && <TransactionOverlay transaction={detail} categories={categories} />}
       <div className="page-head">
         <h1 className="hide-sm">거래내역</h1>
         <MonthSwitcher month={month} current={current} basePath="/transactions" params={{ filter: filter || undefined, q: q || undefined }} />
+        <Link href="/refunds" className="btn sm">환불 연결</Link>
+        <Link href="/installments" className="btn sm">할부 예상 청구</Link>
         <span className="grow" />
         <AddTransaction categories={categories} today={today} />
       </div>

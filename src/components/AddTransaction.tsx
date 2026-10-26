@@ -18,19 +18,21 @@ export function AddTransaction({ categories, today, compact }: { categories: Cat
   const [direction, setDirection] = useState<"OUT" | "IN">("OUT");
   const [state, action] = useActionState<FormState, FormData>(addTransactionAction, {});
   const [formKey, setFormKey] = useState(0);
+  const [draft, setDraft] = useState({ amount: "", merchant: "", date: today, categoryId: "", memo: "" });
 
   useEffect(() => {
     if (state.ok) {
       setOpen(false);
       setFormKey((k) => k + 1);
+      setDraft({ amount: "", merchant: "", date: today, categoryId: "", memo: "" });
     }
-  }, [state]);
+  }, [state, today]);
 
   const options = categories.filter((c) => c.kind === (direction === "IN" ? "INCOME" : "EXPENSE"));
 
   return (
     <>
-      <button type="button" className="btn pri" onClick={() => setOpen(true)}>
+      <button type="button" className="btn pri" onClick={() => { setDraft({ amount: "", merchant: "", date: today, categoryId: "", memo: "" }); setOpen(true); }}>
         <Icon name="plus" />
         {compact ? "입력" : "거래 입력"}
       </button>
@@ -47,19 +49,19 @@ export function AddTransaction({ categories, today, compact }: { categories: Cat
           <input type="hidden" name="direction" value={direction} />
           <label className="label full" htmlFor="tx-amount">
             금액 (원)
-            <input id="tx-amount" name="amount" className="field mono" inputMode="numeric" placeholder="9,000" autoFocus required style={{ fontSize: 20 }} />
+            <input id="tx-amount" name="amount" value={draft.amount} onChange={e => setDraft(d => ({ ...d, amount: e.target.value }))} className="field mono" inputMode="numeric" placeholder="9,000" autoFocus required style={{ fontSize: 20 }} />
           </label>
           <label className="label full" htmlFor="tx-merchant">
             내용
-            <input id="tx-merchant" name="merchant" className="field" placeholder={direction === "IN" ? "용돈" : "점심 (현금)"} required />
+            <input id="tx-merchant" name="merchant" value={draft.merchant} onChange={e => setDraft(d => ({ ...d, merchant: e.target.value }))} className="field" placeholder={direction === "IN" ? "용돈" : "점심 (현금)"} required />
           </label>
           <label className="label" htmlFor="tx-date">
             날짜
-            <input id="tx-date" name="date" type="date" className="field" defaultValue={today} max={today} required />
+            <input id="tx-date" name="date" type="date" className="field" value={draft.date} onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} max={today} required />
           </label>
           <label className="label" htmlFor="tx-category">
             카테고리
-            <select id="tx-category" name="categoryId" className="field" key={direction}>
+            <select id="tx-category" name="categoryId" className="field" key={direction} value={options.some(c => c.id === draft.categoryId) ? draft.categoryId : options[0]?.id ?? ""} onChange={e => setDraft(d => ({ ...d, categoryId: e.target.value }))}>
               {options.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -69,7 +71,7 @@ export function AddTransaction({ categories, today, compact }: { categories: Cat
           </label>
           <label className="label full" htmlFor="tx-memo">
             메모 (선택)
-            <input id="tx-memo" name="memo" className="field" />
+            <input id="tx-memo" name="memo" className="field" value={draft.memo} onChange={e => setDraft(d => ({ ...d, memo: e.target.value }))} />
           </label>
           <p className={`form-msg full ${state.ok === false ? "err" : ""}`} aria-live="polite">
             {state.ok === false ? state.message : ""}

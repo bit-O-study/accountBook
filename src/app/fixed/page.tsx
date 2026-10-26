@@ -3,10 +3,10 @@ import { ActionButton, ConfirmButton } from "@/components/buttons";
 import { Icon } from "@/components/Icon";
 import { RecurringFormButton } from "@/components/RecurringForm";
 import { Suggestions } from "@/components/Suggestions";
-import { categoryMaps, getUser, prisma } from "@/lib/db";
+import { categoryMaps, getUser, loadRules } from "@/lib/server/data";
 import { monthRange, relativeDue, shortDate, todayStr } from "@/lib/dates";
 import { won } from "@/lib/money";
-import { getSuggestions } from "@/lib/recurring/service";
+import { getSuggestions } from "@/lib/server/data";
 import { cycleLabel, nextDueDate } from "@/lib/recurring/schedule";
 
 const STATUS_LABEL: Record<string, string> = { PAID: "납부완료", SCHEDULED: "예정", CHANGED: "금액변동", MISSING: "미확인" };
@@ -17,14 +17,7 @@ export default async function FixedPage() {
   const r = monthRange(today.slice(0, 7));
   const user = await getUser();
   const [rules, suggestions, cats] = await Promise.all([
-    prisma.recurringRule.findMany({
-      where: { userId: user.id },
-      include: {
-        category: true,
-        occurrences: { where: { dueDate: { lte: r.last } }, orderBy: { dueDate: "desc" }, take: 4 },
-      },
-      orderBy: [{ paused: "asc" }, { dueDay: "asc" }],
-    }),
+    loadRules(user.id, today.slice(0, 7)),
     getSuggestions(user.id, today),
     categoryMaps(),
   ]);

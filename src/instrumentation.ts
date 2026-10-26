@@ -1,10 +1,13 @@
 // 서버 안 30분 자동 동기화 (DESIGN §3 수집, §8 동기화 1단계).
-// 2단계에서 Redis + BullMQ 작업 큐로 바꾼다.
+// API 분리 또는 Redis + BullMQ 모드에서는 해당 프로세스가 동기화를 담당한다.
 
 const g = globalThis as unknown as { __syncTimer?: ReturnType<typeof setInterval>; __syncRunning?: boolean };
 
 export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
+  if (process.env.ACCOUNTBOOK_API_URL) return;
+  const { queueEnabled } = await import("@/lib/queue/config");
+  if (queueEnabled()) return;
   // 개발 모드에서 다시 불려도 타이머는 하나만
   if (g.__syncTimer) return;
 

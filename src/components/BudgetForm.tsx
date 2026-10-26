@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { setBudgetAction, type FormState } from "@/app/actions";
 import { SubmitButton } from "./buttons";
 
 export function BudgetForm({ month, current, label }: { month: string; current: number | null; label: string }) {
   const [state, action] = useActionState<FormState, FormData>(setBudgetAction, {});
+  const [amount, setAmount] = useState(String(current ?? ""));
   return (
     <form action={action} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <input type="hidden" name="month" value={month} />
@@ -17,7 +18,8 @@ export function BudgetForm({ month, current, label }: { month: string; current: 
             name="amount"
             className="field mono"
             inputMode="numeric"
-            defaultValue={current ?? ""}
+            value={amount}
+            onChange={event => setAmount(event.target.value)}
             placeholder="1,500,000"
             required
             style={{ fontSize: 17 }}

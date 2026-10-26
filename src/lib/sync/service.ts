@@ -1,6 +1,8 @@
 // 자동 기록 파이프라인: 수집 → 정리 → 중복 제거 → 분류·대조 (검수보고서 4장)
 
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+import { applyCancellation } from "./cancel";
+import { shouldEnqueue } from "../queue/context";
 import { categoryMaps, prisma } from "@/lib/db";
 import { kstStartOfDay, todayStr, addDays, kstDateStr } from "@/lib/dates";
 import { notifyOnce } from "@/lib/notify";
@@ -8,6 +10,7 @@ import { notifySuggestions, reconcileRecurring } from "@/lib/recurring/service";
 import { classifyKind, pickCategory } from "./categorize";
 import { findDuplicate, type DedupeCandidate } from "./dedupe";
 import { normalizeMerchant } from "./normalize";
+import { enqueue, shareInFlight } from "./concurrency";
 import { getProvider } from "./providers";
 import { ProviderAuthError, type ProviderTx } from "./providers/types";
 
@@ -20,6 +23,8 @@ export interface IngestStats {
   merged: number;
   canceled: number;
 }
+
+export type SyncAccountResult = { ok: true; stats: IngestStats } | { ok: false; error: string; retryable: boolean };
 
 export interface IngestInput {
   userId: string;
@@ -71,32 +76,10 @@ export async function ingestTransactions(input: IngestInput): Promise<IngestStat
         stats.duplicates++;
         continue;
       }
-      const orig = await prisma.transaction.findFirst({ where: { userId, accountId, externalId: t.originalExternalId } });
-      if (orig) {
-        if (t.type === "CANCEL") {
-          await prisma.transaction.update({ where: { id: orig.id }, data: { status: "CANCELED" } });
-        } else {
-          await prisma.transaction.update({ where: { id: orig.id }, data: { amount: orig.amount + Math.abs(t.amount) } });
-        }
-        stats.canceled++;
-      }
-      // 취소 기록 자체는 외부 ID 만 남겨 다음 동기화 때 다시 처리하지 않게 한다
-      const rec = await prisma.transaction.create({
-        data: {
-          userId,
-          accountId,
-          externalId: t.externalId,
-          occurredAt: t.occurredAt,
-          amount: 0,
-          kind: "TRANSFER",
-          merchantRaw: `${t.merchantRaw} (취소)`,
-          merchantNorm: normalizeMerchant(t.merchantRaw).norm,
-          source,
-          status: "CANCELED",
-          excluded: true,
-        },
-      });
-      existing.push({ ...rec });
+      const result = await applyCancellation(userId, accountId, source, t);
+      if (result.duplicate) stats.duplicates++;
+      if (result.canceled) stats.canceled++;
+      existing.push({ ...result.marker });
       continue;
     }
 
@@ -137,22 +120,49 @@ export async function ingestTransactions(input: IngestInput): Promise<IngestStat
       source,
       mcc: t.mcc ?? null,
     };
-    const created = await prisma.transaction.create({ data });
-    existing.push({ ...created });
-    stats.added++;
+    try {
+      const created = await prisma.transaction.create({ data });
+      existing.push({ ...created });
+      stats.added++;
+    } catch (error) {
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== "P2002" || !accountId) throw error;
+      const duplicate = await prisma.transaction.findUnique({ where: { accountId_externalId: { accountId, externalId: t.externalId } } });
+      if (!duplicate || duplicate.userId !== userId) throw error;
+      existing.push({ ...duplicate }); stats.duplicates++;
+    }
   }
   return stats;
 }
 
-export async function syncAccount(accountId: string, now = new Date()) {
+// 타이머와 서버 액션, 개발 모드 모듈 재로딩이 동일한 진행 중 작업을 공유한다.
+const syncGlobal = globalThis as typeof globalThis & {
+  __accountBookSync?: {
+    accounts: Map<string, Promise<Awaited<ReturnType<typeof runSyncAccount>>>>;
+    afterChanges: Map<string, Promise<unknown>>;
+  };
+};
+const pending = syncGlobal.__accountBookSync ??= { accounts: new Map(), afterChanges: new Map() };
+
+export function syncAccount(accountId: string, now = new Date()): Promise<SyncAccountResult> {
+  return shareInFlight(pending.accounts, accountId, async () => {
+    if (shouldEnqueue()) {
+      const account = await prisma.linkedAccount.findUniqueOrThrow({ where: { id: accountId }, select: { userId: true } });
+      const { requestSync } = await import("../queue/client");
+      return requestSync<SyncAccountResult>({ kind: "account", userId: account.userId, accountId });
+    }
+    return runSyncAccount(accountId, now);
+  });
+}
+
+async function runSyncAccount(accountId: string, now: Date): Promise<SyncAccountResult> {
   const account = await prisma.linkedAccount.findUniqueOrThrow({ where: { id: accountId } });
   await prisma.linkedAccount.update({ where: { id: accountId }, data: { syncStatus: "SYNCING" } });
-  const provider = getProvider(account.provider);
   const since = account.lastSyncedAt
     ? new Date(account.lastSyncedAt.getTime() - OVERLAP_MS)
     : new Date(0); // 처음이면 연동사가 주는 만큼 전부
 
   try {
+    const provider = getProvider(account.provider);
     const items = await provider.fetchTransactions(
       { ...account, kind: account.kind as "CARD" | "BANK" },
       since,
@@ -188,29 +198,42 @@ export async function syncAccount(accountId: string, now = new Date()) {
         "/accounts",
       );
     }
-    return { ok: false as const, error: message };
+    return { ok: false as const, error: message, retryable: !isAuth };
   }
 }
 
 /** 사용자의 모든 계정을 동기화하고 고정지출 대조·감지까지 돌린다 */
-export async function syncUser(userId: string, opts: { onlyStale?: boolean } = {}) {
+export async function syncUser(userId: string, opts: { onlyStale?: boolean } = {}): Promise<{ ran: number; retryableFailures: number }> {
+  if (shouldEnqueue()) {
+    const { requestSync } = await import("../queue/client");
+    return requestSync({ kind: "user", userId, onlyStale: !!opts.onlyStale });
+  }
   const accounts = await prisma.linkedAccount.findMany({ where: { userId } });
   const cutoff = Date.now() - (opts.onlyStale ? 5 * 60 * 1000 : 0);
   let ran = 0;
+  let retryableFailures = 0;
   for (const a of accounts) {
     if (a.syncStatus === "REAUTH") continue; // 사용자가 다시 연결해야 함
     if (opts.onlyStale && a.lastSyncedAt && a.lastSyncedAt.getTime() > cutoff) continue;
-    await syncAccount(a.id);
+    const result = await syncAccount(a.id);
+    if (!result.ok && result.retryable) retryableFailures++;
     ran++;
   }
   await afterDataChange(userId);
-  return { ran };
+  return { ran, retryableFailures };
 }
 
-export async function afterDataChange(userId: string) {
-  const today = todayStr();
-  await reconcileRecurring(userId, today);
-  await notifySuggestions(userId, today);
+export function afterDataChange(userId: string): Promise<void> {
+  return enqueue(pending.afterChanges, userId, async () => {
+    if (shouldEnqueue()) {
+      const { requestSync } = await import("../queue/client");
+      await requestSync({ kind: "reconcile", userId });
+      return;
+    }
+    const today = todayStr();
+    await reconcileRecurring(userId, today);
+    await notifySuggestions(userId, today);
+  });
 }
 
 export async function syncAllUsers() {

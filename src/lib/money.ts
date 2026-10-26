@@ -9,8 +9,12 @@ export function signedWon(n: number): string {
   return "0";
 }
 
-/** "29,900원", "29900" → 29900. 숫자가 없으면 NaN */
-export function parseWon(s: string): number {
-  const digits = s.replace(/[^0-9]/g, "");
-  return digits ? parseInt(digits, 10) : NaN;
+/** 원 단위 정수만 받는다. CSV만 allowSign으로 부호를 허용한다. */
+export function parseWon(s: string, allowSign = false): number {
+  const text = s.trim().replace(/원$/, "").trim();
+  const sign = allowSign && /^[+-]/.test(text) ? text[0] : "";
+  const digits = sign ? text.slice(1) : text;
+  if (!/^(?:\d+|\d{1,3}(?:,\d{3})+)$/.test(digits)) return NaN;
+  const value = Number(sign + digits.replaceAll(",", ""));
+  return Number.isSafeInteger(value) && Math.abs(value) <= 2147483647 ? value : NaN;
 }

@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  serverExternalPackages: ["@prisma/client"],
+  serverExternalPackages: ["@prisma/client", "bullmq", "ioredis"],
 };
 
 export default nextConfig;

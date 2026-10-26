@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { saveRecurringAction, type FormState } from "@/app/actions";
 import type { CategoryOption } from "./AddTransaction";
 import { SubmitButton } from "./buttons";
@@ -52,23 +52,39 @@ export function RecurringFormButton({
 
 function RecurringForm({ categories, rule, onDone }: { categories: CategoryOption[]; rule?: RuleInput; onDone: () => void }) {
   const [state, action] = useActionState<FormState, FormData>(saveRecurringAction, {});
+  const formRef = useRef<HTMLFormElement>(null);
   const [cycle, setCycle] = useState(rule?.cycle ?? "MONTHLY");
   const [variable, setVariable] = useState(rule ? rule.amountMin != null || rule.amountMax != null : false);
+  const [draft, setDraft] = useState({
+    name: rule?.name ?? "", amount: String(rule?.amount ?? ""), amountMin: String(rule?.amountMin ?? ""), amountMax: String(rule?.amountMax ?? ""),
+    day: String(rule && rule.cycle !== "WEEKLY" ? rule.dueDay : 25), weekday: String(rule?.cycle === "WEEKLY" ? rule.dueDay : 1),
+    dueMonth: String(rule?.dueMonth ?? 1), categoryId: rule?.categoryId ?? categories.find(category => category.kind === "EXPENSE")?.id ?? "",
+    payment: rule?.payment ?? "", merchant: rule?.merchantNorm ?? "", notifyDays: rule?.notifyDays ?? "3,1", endDate: rule?.endDate ?? "",
+  });
+  const field = (name: keyof typeof draft) => ({ value: draft[name], onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setDraft(previous => ({ ...previous, [name]: event.target.value })) });
+
+  // React resets action forms during commit, when synthetic reset handlers are disabled.
+  useEffect(() => {
+    const form = formRef.current;
+    const preserveDraft = (event: Event) => event.preventDefault();
+    form?.addEventListener("reset", preserveDraft);
+    return () => form?.removeEventListener("reset", preserveDraft);
+  }, []);
 
   useEffect(() => {
     if (state.ok) onDone();
   }, [state, onDone]);
 
   return (
-    <form action={action} className="form-grid">
+    <form action={action} className="form-grid" ref={formRef}>
       {rule && <input type="hidden" name="id" value={rule.id} />}
       <label className="label" htmlFor="r-name">
         이름
-        <input id="r-name" name="name" className="field" defaultValue={rule?.name} placeholder="정수기 렌탈" required />
+        <input id="r-name" name="name" className="field" {...field("name")} placeholder="정수기 렌탈" required />
       </label>
       <label className="label" htmlFor="r-amount">
         금액 (원)
-        <input id="r-amount" name="amount" className="field mono" inputMode="numeric" defaultValue={rule?.amount} placeholder="29,900" required />
+        <input id="r-amount" name="amount" className="field mono" inputMode="numeric" {...field("amount")} placeholder="29,900" required />
       </label>
       <label className="check full">
         <input type="checkbox" name="variable" checked={variable} onChange={(e) => setVariable(e.target.checked)} />
@@ -78,11 +94,11 @@ function RecurringForm({ categories, rule, onDone }: { categories: CategoryOptio
         <>
           <label className="label" htmlFor="r-min">
             최소
-            <input id="r-min" name="amountMin" className="field mono" inputMode="numeric" defaultValue={rule?.amountMin ?? ""} placeholder="20,000" />
+            <input id="r-min" name="amountMin" className="field mono" inputMode="numeric" {...field("amountMin")} placeholder="20,000" />
           </label>
           <label className="label" htmlFor="r-max">
             최대
-            <input id="r-max" name="amountMax" className="field mono" inputMode="numeric" defaultValue={rule?.amountMax ?? ""} placeholder="90,000" />
+            <input id="r-max" name="amountMax" className="field mono" inputMode="numeric" {...field("amountMax")} placeholder="90,000" />
           </label>
         </>
       )}
@@ -97,7 +113,7 @@ function RecurringForm({ categories, rule, onDone }: { categories: CategoryOptio
       {cycle === "WEEKLY" ? (
         <label className="label" htmlFor="r-day">
           요일
-          <select id="r-day" name="dueDay" className="field" defaultValue={rule?.cycle === "WEEKLY" ? rule.dueDay : 1}>
+          <select id="r-day" name="dueDay" className="field" {...field("weekday")}>
             {WEEK.map((w, i) => (
               <option key={w} value={i}>
                 {w}요일
@@ -110,7 +126,7 @@ function RecurringForm({ categories, rule, onDone }: { categories: CategoryOptio
           {cycle === "YEARLY" && (
             <label className="label" htmlFor="r-month">
               월
-              <select id="r-month" name="dueMonth" className="field" defaultValue={rule?.dueMonth ?? 1}>
+              <select id="r-month" name="dueMonth" className="field" {...field("dueMonth")}>
                 {Array.from({ length: 12 }, (_, i) => (
                   <option key={i} value={i + 1}>
                     {i + 1}월
@@ -121,7 +137,7 @@ function RecurringForm({ categories, rule, onDone }: { categories: CategoryOptio
           )}
           <label className="label" htmlFor="r-day">
             결제일
-            <select id="r-day" name="dueDay" className="field" defaultValue={rule && rule.cycle !== "WEEKLY" ? rule.dueDay : 25}>
+            <select id="r-day" name="dueDay" className="field" {...field("day")}>
               {Array.from({ length: 31 }, (_, i) => (
                 <option key={i} value={i + 1}>
                   {i + 1}일{i === 30 ? " (말일)" : ""}
@@ -133,7 +149,7 @@ function RecurringForm({ categories, rule, onDone }: { categories: CategoryOptio
       )}
       <label className="label" htmlFor="r-cat">
         카테고리
-        <select id="r-cat" name="categoryId" className="field" defaultValue={rule?.categoryId ?? ""}>
+        <select id="r-cat" name="categoryId" className="field" {...field("categoryId")}>
           {categories
             .filter((c) => c.kind === "EXPENSE")
             .map((c) => (
@@ -145,15 +161,15 @@ function RecurringForm({ categories, rule, onDone }: { categories: CategoryOptio
       </label>
       <label className="label" htmlFor="r-pay">
         결제수단
-        <input id="r-pay" name="payment" className="field" defaultValue={rule?.payment ?? ""} placeholder="신한카드" />
+        <input id="r-pay" name="payment" className="field" {...field("payment")} placeholder="신한카드" />
       </label>
       <label className="label full" htmlFor="r-merchant">
         내역에 찍히는 이름 (대조용, 비우면 이름으로)
-        <input id="r-merchant" name="merchant" className="field" defaultValue={rule?.merchantNorm ?? ""} placeholder="코웨이" />
+        <input id="r-merchant" name="merchant" className="field" {...field("merchant")} placeholder="코웨이" />
       </label>
       <label className="label" htmlFor="r-notify">
         알림
-        <select id="r-notify" name="notifyDays" className="field" defaultValue={rule?.notifyDays ?? "3,1"}>
+        <select id="r-notify" name="notifyDays" className="field" {...field("notifyDays")}>
           <option value="3,1">3일 전, 1일 전</option>
           <option value="1">1일 전</option>
           <option value="0">당일</option>
@@ -162,7 +178,7 @@ function RecurringForm({ categories, rule, onDone }: { categories: CategoryOptio
       </label>
       <label className="label" htmlFor="r-end">
         종료일 (약정 끝, 선택)
-        <input id="r-end" name="endDate" type="date" className="field" defaultValue={rule?.endDate ?? ""} />
+        <input id="r-end" name="endDate" type="date" className="field" {...field("endDate")} />
       </label>
       <p className={`form-msg full ${state.ok === false ? "err" : ""}`} aria-live="polite">
         {state.ok === false ? state.message : ""}

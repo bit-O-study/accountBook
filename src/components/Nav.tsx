@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon, type IconName } from "./Icon";
+import { SyncTime } from "./SyncTime";
 
 interface NavInfo {
   unread: number;
@@ -23,15 +24,6 @@ const MANAGE: { href: string; label: string; icon: IconName }[] = [
 
 function isOn(path: string, href: string) {
   return href === "/" ? path === "/" : path.startsWith(href);
-}
-
-function ago(iso: string | null): string {
-  if (!iso) return "대기";
-  const min = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-  if (min < 1) return "방금";
-  if (min < 60) return `${min}분 전`;
-  if (min < 60 * 24) return `${Math.floor(min / 60)}시간 전`;
-  return `${Math.floor(min / 1440)}일 전`;
 }
 
 export function Sidebar({ info }: { info: NavInfo }) {
@@ -67,9 +59,8 @@ export function Sidebar({ info }: { info: NavInfo }) {
             <Link key={a.id} href="/accounts">
               <span className={`dot ${a.status}`} />
               {a.name}
-              {/* 상대 시간은 서버·브라우저 렌더 사이에 분이 바뀔 수 있다 */}
-              <small className={a.status === "REAUTH" || a.status === "ERROR" ? "err" : ""} suppressHydrationWarning>
-                {a.status === "REAUTH" ? "재인증" : a.status === "ERROR" ? "오류" : ago(a.lastSyncedAt)}
+              <small className={a.status === "REAUTH" || a.status === "ERROR" ? "err" : ""}>
+                {a.status === "REAUTH" ? "재인증" : a.status === "ERROR" ? "오류" : a.status === "SYNCING" ? "동기화 중" : <SyncTime at={a.lastSyncedAt} />}
               </small>
             </Link>
           ))}

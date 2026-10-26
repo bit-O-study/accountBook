@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { getUser } from "@/lib/db";
+import { currentUser } from "@/lib/auth/request";
+import { AccountMenu } from "@/components/auth/AccountMenu";
 import { loadShellInfo } from "@/lib/queries";
-import { getSuggestions } from "@/lib/recurring/service";
+import { getSuggestions } from "@/lib/server/data";
 import { Sidebar, TabBar } from "@/components/Nav";
 import { SyncOnOpen } from "@/components/SyncOnOpen";
 import "./globals.css";
@@ -24,9 +25,9 @@ export const viewport: Viewport = {
 export const dynamic = "force-dynamic";
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const user = await getUser();
-  const [shell, suggestions] = await Promise.all([loadShellInfo(user.id), getSuggestions(user.id)]);
-  const info = { ...shell, suggestions: suggestions.length };
+  const user = await currentUser();
+  const data = user ? await Promise.all([loadShellInfo(user.id), getSuggestions(user.id)]) : null;
+  const info = data ? { ...data[0], suggestions: data[1].length } : null;
 
   return (
     <html lang="ko">
@@ -39,12 +40,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body>
-        <div className="shell">
+        {user && info ? <><div className="shell">
           <Sidebar info={info} />
-          <main className="main">{children}</main>
+          <main className="main"><AccountMenu name={user.name} />{children}</main>
         </div>
         <TabBar info={info} />
-        <SyncOnOpen />
+        <SyncOnOpen /></> : children}
       </body>
     </html>
   );

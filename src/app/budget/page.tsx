@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BudgetForm } from "@/components/BudgetForm";
 import { CumulativeChart } from "@/components/CumulativeChart";
 import { MonthSwitcher } from "@/components/MonthSwitcher";
-import { getUser, prisma } from "@/lib/db";
+import { getUser, loadOwnBudget } from "@/lib/server/data";
 import { isValidMonthKey, monthLabel, shiftMonth, todayStr } from "@/lib/dates";
 import { won } from "@/lib/money";
 import { loadMonthSummary } from "@/lib/queries";
@@ -18,7 +18,7 @@ export default async function BudgetPage({ searchParams }: { searchParams: Promi
   const months = [3, 2, 1].map((n) => shiftMonth(month, -n));
   const [{ summary: s }, own, ...past] = await Promise.all([
     loadMonthSummary(user.id, month, today),
-    prisma.budget.findUnique({ where: { userId_month: { userId: user.id, month } } }),
+    loadOwnBudget(user.id, month),
     ...months.map((m) => loadMonthSummary(user.id, m, today)),
   ]);
   const history = [...past.map((p) => p.summary), s];

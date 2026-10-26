@@ -11,18 +11,31 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "setup": "prisma db push --force-reset && tsx prisma/seed.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "api:build": "node scripts/api/build.cjs"
   },
   "dependencies": {
+    "@nestjs/common": "^11.2.8",
+    "@nestjs/core": "^11.2.8",
+    "@nestjs/platform-express": "^11.2.8",
     "@prisma/client": "6.2.1",
+    "bullmq": "^5.81.5",
+    "ioredis": "^5.11.1",
     "next": "15.5.28",
+    "nodemailer": "^10.2.1",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@types/node": "20.17.10",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
+    "@types/web-push": "^3.6.4",
+    "esbuild": "^0.23.1",
     "prisma": "6.2.1",
     "tsx": "4.23.15",
     "typescript": "5.7.3",

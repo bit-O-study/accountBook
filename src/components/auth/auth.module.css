@@ -1,0 +1,15 @@
+.screen { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; }
+.card { width: 100%; max-width: 420px; padding: 28px; }
+.brand { color: var(--accent); font-size: 15px; font-weight: 700; margin-bottom: 24px; }
+.title { font-size: 26px; margin-bottom: 8px; }
+.intro { color: var(--muted); margin-bottom: 24px; }
+.form { display: flex; flex-direction: column; gap: 16px; }
+.hint { color: var(--muted); font-size: 12px; font-weight: 400; }
+.error { color: var(--bad); font-size: 13px; }
+.footer { margin-top: 20px; text-align: center; font-size: 13px; color: var(--muted); }
+.claim { padding: 12px; border: 1px solid var(--line); border-radius: 10px; }
+.claim summary { cursor: pointer; color: var(--ink2); }
+.claim label { margin-top: 12px; }
+.toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-bottom: 16px; min-width: 0; }
+.name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 13px; }
+@media (max-width: 380px) { .card { padding: 22px 18px; } }
