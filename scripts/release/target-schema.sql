@@ -271,4 +271,3 @@ CREATE INDEX "NotificationDelivery_status_retryAt_idx" ON "NotificationDelivery"
 
 -- CreateIndex
 CREATE UNIQUE INDEX "NotificationDelivery_batchId_channel_target_key" ON "NotificationDelivery"("batchId", "channel", "target");
-
