@@ -1,0 +1,17 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const { spawnSync } = require('node:child_process');
+const root = path.resolve(__dirname, '../..');
+const fixture = JSON.parse(fs.readFileSync(path.join(root, 'docs/release-candidate/migration-results.json')));
+assert.ok(path.resolve(fixture.database).startsWith(root + path.sep + '.release-test-'));
+assert.equal(fixture.productionDatabaseTouched, false);
+const env = { ...process.env, DATABASE_URL: `file:${fixture.database.replaceAll('\\', '/')}`, ACCOUNTBOOK_API_URL: '', REDIS_URL: '', SYNC_MODE: 'local', NEXT_TELEMETRY_DISABLED: '1', NODE_ENV: 'production' };
+const build = spawnSync(process.execPath, ['node_modules/next/dist/bin/next', 'build'], { cwd: root, env, windowsHide: true, encoding: 'utf8', timeout: 600000, maxBuffer: 10 * 1024 * 1024 });
+fs.writeFileSync(path.join(root, 'docs/release-candidate/build.log'), (build.stdout || '') + (build.stderr || ''));
+process.stdout.write(build.stdout || ''); process.stderr.write(build.stderr || '');
+assert.equal(build.status, 0, build.error?.message || 'Next build failed');
+assert.ok(fs.existsSync(path.join(root, '.next/standalone/server.js')), 'Standalone server missing');
+assert.equal(require(path.join(root, 'node_modules/next/package.json')).version, '15.5.28');
+assert.equal(require(path.join(root, 'node_modules/postcss/package.json')).version, '8.5.31');
+console.log('PASS: patched Next/PostCSS and standalone build, synthetic SQLite only');

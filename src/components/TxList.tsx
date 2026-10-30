@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { TransactionDetail } from "@/lib/application/queries";
 import { useActionState, useEffect, useState, useTransition } from "react";
 import {
   deleteTransactionAction,
@@ -13,6 +16,7 @@ import type { TxView } from "@/lib/queries";
 import type { CategoryOption } from "./AddTransaction";
 import { SubmitButton } from "./buttons";
 import { Modal } from "./Modal";
+import { InstallmentForm } from "./InstallmentForm";
 
 const SOURCE_LABEL = { AUTO: "자동", MANUAL: "수동", CSV: "CSV" } as const;
 
@@ -25,6 +29,7 @@ export function TxTag({ tx }: { tx: Pick<TxView, "source" | "fixedName" | "kind"
 
 function sub(tx: TxView) {
   const parts = [tx.category];
+  if (tx.installmentMonths > 1) parts.push(tx.installmentMonths + "개월 할부");
   if (tx.fixedName) parts.push(`${tx.fixedName} 납부`);
   parts.push(tx.accountName ?? (tx.source === "CSV" ? "CSV" : "현금"));
   if (tx.status === "CANCELED") parts.push("승인 취소");
@@ -60,7 +65,11 @@ export function TxRow({ tx, onOpen, showDate }: { tx: TxView; onOpen?: (t: TxVie
 }
 
 export function TxList({ txs, categories, grouped = true }: { txs: TxView[]; categories: CategoryOption[]; grouped?: boolean }) {
-  const [selected, setSelected] = useState<TxView | null>(null);
+  const router = useRouter();const pathname = usePathname();const params = useSearchParams();
+  const open = (tx: TxView) => {
+    const next = pathname === "/transactions" ? new URLSearchParams(params.toString()) : new URLSearchParams({ month: tx.date.slice(0, 7) });
+    next.set("tx", tx.id);router.push("/transactions?" + next.toString(), { scroll: false });
+  };
 
   if (!txs.length) {
     return (
@@ -92,22 +101,24 @@ export function TxList({ txs, categories, grouped = true }: { txs: TxView[]; cat
                   <span>{signedWon(g.total)}</span>
                 </div>
                 {g.list.map((t) => (
-                  <TxRow key={t.id} tx={t} onOpen={setSelected} />
+                  <TxRow key={t.id} tx={t} onOpen={open} />
                 ))}
               </div>
             ))
-          : txs.map((t) => <TxRow key={t.id} tx={t} onOpen={setSelected} showDate />)}
+          : txs.map((t) => <TxRow key={t.id} tx={t} onOpen={open} showDate />)}
       </div>
-      <TxDetail tx={selected} categories={categories} onClose={() => setSelected(null)} />
+
     </>
   );
 }
 
-function TxDetail({ tx, categories, onClose }: { tx: TxView | null; categories: CategoryOption[]; onClose: () => void }) {
+export function TxDetail({ tx, categories, onClose }: { tx: TransactionDetail | null; categories: CategoryOption[]; onClose: () => void }) {
   const [state, action] = useActionState<FormState, FormData>(updateTransactionAction, {});
   const [note, setNote] = useState<FormState>({});
   const [pending, start] = useTransition();
   const [catId, setCatId] = useState<string>("");
+  const params = useSearchParams();
+  const transactionHref = (id: string) => { const next = new URLSearchParams(params.toString()); next.set("tx", id); return "/transactions?" + next.toString(); };
 
   useEffect(() => {
     setNote({});
@@ -131,6 +142,14 @@ function TxDetail({ tx, categories, onClose }: { tx: TxView | null; categories: 
   return (
     <Modal open={!!tx} onClose={onClose} title="거래 상세">
       {tx && (
+        <>
+        {(tx.refundOriginal || tx.refunds.length > 0) && <section aria-label="환불 연결 정보" style={{ marginBottom: 20 }}>
+          <b>환불 연결</b>
+          <p className="faint">설명용 연결이며 지출·수입 합계는 그대로예요.</p>
+          {tx.refundOriginal && <p>원거래 <Link href={transactionHref(tx.refundOriginal.id)} scroll={false}>{tx.refundOriginal.date} · {tx.refundOriginal.merchant} · {signedWon(tx.refundOriginal.amount)}원</Link></p>}
+          {tx.refunds.length > 0 && <ul>{tx.refunds.map(refund => <li key={refund.id}><Link href={transactionHref(refund.id)} scroll={false}>{refund.date} · {refund.merchant} · {signedWon(refund.amount)}원</Link>{refund.status !== "APPROVED" && " · 취소"}</li>)}</ul>}
+          <Link className="btn sm" href={"/refunds?month=" + (tx.refundOriginal ? tx.date : tx.refunds[0]?.date ?? tx.date).slice(0, 7)}>환불 연결 관리</Link>
+        </section>}
         <form action={action} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <input type="hidden" name="id" value={tx.id} />
           <div>
@@ -207,6 +226,8 @@ function TxDetail({ tx, categories, onClose }: { tx: TxView | null; categories: 
             </p>
           )}
         </form>
+        {(tx.installmentMonths > 1 || (tx.kind === "EXPENSE" && tx.status === "APPROVED" && tx.amount < 0)) && <InstallmentForm key={tx.id} tx={tx} />}
+        </>
       )}
     </Modal>
   );

@@ -1,0 +1,165 @@
+{
+  "checkedAt": "2026-10-26T05:23:32.979Z",
+  "base": "7f784b3",
+  "database": "C:\\git\\Bit-O\\.worktrees\\accountbook-release-20261026\\.release-test-nWo2im\\legacy-p2-auth-test.db",
+  "backup": "C:\\git\\Bit-O\\.worktrees\\accountbook-release-20261026\\.release-test-nWo2im\\before.db",
+  "originalTables": [
+    {
+      "table": "User",
+      "columns": [
+        "id",
+        "name",
+        "createdAt"
+      ],
+      "count": 2,
+      "hash": "7ddb0311cb2de9bcf4f5e1652c1812e2dd15fae16860907853be33c8f2988802"
+    },
+    {
+      "table": "LinkedAccount",
+      "columns": [
+        "id",
+        "userId",
+        "provider",
+        "name",
+        "kind",
+        "tokenEnc",
+        "providerConfig",
+        "syncStatus",
+        "lastSyncedAt",
+        "lastError",
+        "failCount",
+        "createdAt"
+      ],
+      "count": 2,
+      "hash": "d8be50acc9f91bd87dd871f21e9efeaeea2a96d8f1f2d5b3c4218df90d7333e8"
+    },
+    {
+      "table": "Category",
+      "columns": [
+        "id",
+        "name",
+        "kind",
+        "sortOrder"
+      ],
+      "count": 1,
+      "hash": "2fb78763db20386181a4d08ea83916425c95107e5867601427f947f25938b96a"
+    },
+    {
+      "table": "Transaction",
+      "columns": [
+        "id",
+        "userId",
+        "accountId",
+        "externalId",
+        "occurredAt",
+        "amount",
+        "kind",
+        "merchantRaw",
+        "merchantNorm",
+        "categoryId",
+        "source",
+        "status",
+        "memo",
+        "excluded",
+        "mcc",
+        "createdAt"
+      ],
+      "count": 2,
+      "hash": "d93c302be6c06a3e12caacb1a81635a3cd27de947f31d49be73d22962628ecdb"
+    },
+    {
+      "table": "CategoryRule",
+      "columns": [
+        "id",
+        "userId",
+        "merchantNorm",
+        "categoryId"
+      ],
+      "count": 2,
+      "hash": "c60423da26d917a6c19fd5a8eb9df3b6a0d9818947944975f8ff4d480511ece0"
+    },
+    {
+      "table": "RecurringRule",
+      "columns": [
+        "id",
+        "userId",
+        "name",
+        "amount",
+        "amountMin",
+        "amountMax",
+        "cycle",
+        "dueDay",
+        "dueMonth",
+        "merchantNorm",
+        "categoryId",
+        "payment",
+        "notifyDays",
+        "startDate",
+        "endDate",
+        "paused",
+        "createdAt"
+      ],
+      "count": 2,
+      "hash": "8b59137793a9230b95b3bcc5d1ee36ab2857975bdae29cc9b8a4edae695eb258"
+    },
+    {
+      "table": "RecurringOccurrence",
+      "columns": [
+        "id",
+        "ruleId",
+        "dueDate",
+        "status",
+        "transactionId",
+        "matchedAmount"
+      ],
+      "count": 2,
+      "hash": "659a49b19c2bb1e269a66b341a3718fee0663858d2cf7272b70bf61746a81c2a"
+    },
+    {
+      "table": "RecurringDismissal",
+      "columns": [
+        "id",
+        "userId",
+        "merchantNorm",
+        "until"
+      ],
+      "count": 2,
+      "hash": "1e11db98106c822448dd9e701d3d8fb15939e14475b73bf80cc86a2a7fcc33cf"
+    },
+    {
+      "table": "Budget",
+      "columns": [
+        "id",
+        "userId",
+        "month",
+        "livingAmount"
+      ],
+      "count": 2,
+      "hash": "05a2f7b87de3d26a54b9077a3beb0b82e77581f39db488d05795a807cd5a81b5"
+    },
+    {
+      "table": "Notification",
+      "columns": [
+        "id",
+        "userId",
+        "key",
+        "type",
+        "title",
+        "body",
+        "href",
+        "createdAt",
+        "readAt"
+      ],
+      "count": 2,
+      "hash": "fa8fbe5125889365559993897bc048ff98c90ce229550337ee9fb46c6bb4d2e5"
+    }
+  ],
+  "preservedRowsAndAmounts": true,
+  "legacyOwnersUnclaimed": true,
+  "rerunPreservesNewValues": true,
+  "notificationCompositeUnique": true,
+  "refundSetNull": true,
+  "malformedSchemasRollBack": true,
+  "authVerification": "PASS: signup uniqueness/concurrency, password, sessions, legacy claim expiry/replay, per-user notifications, concurrent rate limit",
+  "productionDatabaseTouched": false
+}

@@ -13,3 +13,10 @@ prisma/*.db-journal
 .next/
 release/
 release.tar
+
+.api/
+.release-test-*/
+
+!scripts/release/
+!scripts/release/**
+docs/release-candidate/browser/*.png

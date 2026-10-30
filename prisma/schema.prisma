@@ -14,6 +14,11 @@ datasource db {
 model User {
   id            String               @id @default(cuid())
   name          String
+  email         String?              @unique
+  passwordHash  String?
+  claimTokenHash String?             @unique
+  claimExpiresAt DateTime?
+  sessions      Session[]
   createdAt     DateTime             @default(now())
   accounts      LinkedAccount[]
   transactions  Transaction[]
@@ -22,6 +27,9 @@ model User {
   budgets       Budget[]
   dismissals    RecurringDismissal[]
   notifications Notification[]
+  notificationPreference NotificationPreference?
+  pushSubscriptions PushSubscription[]
+  notificationBatches NotificationBatch[]
 }
 
 model LinkedAccount {
@@ -70,12 +78,18 @@ model Transaction {
   memo         String?
   excluded     Boolean              @default(false)
   mcc          String?
+  installmentMonths Int             @default(1)
+  firstBillingMonth String?
+  refundOfId   String?
+  refundOriginal Transaction? @relation("RefundLinks", fields: [refundOfId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  refunds      Transaction[] @relation("RefundLinks")
   createdAt    DateTime             @default(now())
   occurrence   RecurringOccurrence?
 
   @@unique([accountId, externalId])
   @@index([userId, occurredAt])
   @@index([userId, merchantNorm])
+  @@index([refundOfId])
 }
 
 model CategoryRule {
@@ -149,11 +163,86 @@ model Notification {
   id        String    @id @default(cuid())
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  key       String    @unique // 같은 알림 중복 발송 방지
+  key       String // 사용자별 같은 알림 중복 발송 방지
   type      String // DUE | CHANGED | MISSING | SUGGEST | SYNC_FAIL | BUDGET
   title     String
   body      String
   href      String?
   createdAt DateTime  @default(now())
   readAt    DateTime?
+
+  @@unique([userId, key])
+}
+
+model Session {
+  tokenHash String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model AuthRateLimit {
+  key       String   @id
+  attempts  Int      @default(0)
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
+model NotificationPreference {
+  userId String @id
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailEnabled Boolean @default(false)
+  emailVerifiedAddress String?
+  emailEnabledAt DateTime?
+  codeHash String?
+  codeExpiresAt DateTime?
+  codeAttempts Int @default(0)
+  requestAt DateTime?
+  requestWindow DateTime?
+  requestCount Int @default(0)
+}
+
+model PushSubscription {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint String @unique
+  p256dh String
+  auth String
+  createdAt DateTime @default(now())
+  @@index([userId])
+}
+
+model NotificationBatch {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slot String
+  cutoff DateTime
+  expiresAt DateTime
+  deliveries NotificationDelivery[]
+  @@unique([userId, slot])
+  @@index([userId, cutoff])
+}
+
+model NotificationDelivery {
+  id String @id @default(cuid())
+  batchId String
+  batch NotificationBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  channel String
+  target String
+  count Int
+  status String @default("READY")
+  attempts Int @default(0)
+  retryAt DateTime
+  startedAt DateTime?
+  sentAt DateTime?
+  errorCode String?
+  @@unique([batchId, channel, target])
+  @@index([status, retryAt])
 }

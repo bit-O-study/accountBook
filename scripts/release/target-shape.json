@@ -1,0 +1,1461 @@
+{
+  "User": {
+    "columns": [
+      {
+        "name": "claimExpiresAt",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "claimTokenHash",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "createdAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": "CURRENT_TIMESTAMP",
+        "pk": 0
+      },
+      {
+        "name": "email",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "passwordHash",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [],
+    "indexes": [
+      {
+        "name": "User_claimTokenHash_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "claimTokenHash",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "User_email_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "email",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "LinkedAccount": {
+    "columns": [
+      {
+        "name": "createdAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": "CURRENT_TIMESTAMP",
+        "pk": 0
+      },
+      {
+        "name": "failCount",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": "0",
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "kind",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "lastError",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "lastSyncedAt",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "provider",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "providerConfig",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": "''",
+        "pk": 0
+      },
+      {
+        "name": "syncStatus",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": "'OK'",
+        "pk": 0
+      },
+      {
+        "name": "tokenEnc",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": []
+  },
+  "Category": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "kind",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "sortOrder",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": "0",
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [],
+    "indexes": [
+      {
+        "name": "Category_name_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "name",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "Transaction": {
+    "columns": [
+      {
+        "name": "accountId",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "amount",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "categoryId",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "createdAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": "CURRENT_TIMESTAMP",
+        "pk": 0
+      },
+      {
+        "name": "excluded",
+        "type": "BOOLEAN",
+        "notnull": 1,
+        "default": "false",
+        "pk": 0
+      },
+      {
+        "name": "externalId",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "firstBillingMonth",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "installmentMonths",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": "1",
+        "pk": 0
+      },
+      {
+        "name": "kind",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "mcc",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "memo",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "merchantNorm",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "merchantRaw",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "occurredAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "refundOfId",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "source",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "status",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": "'APPROVED'",
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "LinkedAccount",
+        "from": "accountId",
+        "to": "id",
+        "on_delete": "SET NULL",
+        "on_update": "CASCADE"
+      },
+      {
+        "table": "Category",
+        "from": "categoryId",
+        "to": "id",
+        "on_delete": "SET NULL",
+        "on_update": "CASCADE"
+      },
+      {
+        "table": "Transaction",
+        "from": "refundOfId",
+        "to": "id",
+        "on_delete": "SET NULL",
+        "on_update": "NO ACTION"
+      },
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "Transaction_accountId_externalId_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "accountId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "externalId",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "Transaction_refundOfId_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "refundOfId",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "Transaction_userId_merchantNorm_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "merchantNorm",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "Transaction_userId_occurredAt_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "occurredAt",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "CategoryRule": {
+    "columns": [
+      {
+        "name": "categoryId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "merchantNorm",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "Category",
+        "from": "categoryId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      },
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "CategoryRule_userId_merchantNorm_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "merchantNorm",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "RecurringRule": {
+    "columns": [
+      {
+        "name": "amount",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "amountMax",
+        "type": "INTEGER",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "amountMin",
+        "type": "INTEGER",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "categoryId",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "createdAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": "CURRENT_TIMESTAMP",
+        "pk": 0
+      },
+      {
+        "name": "cycle",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "dueDay",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "dueMonth",
+        "type": "INTEGER",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "endDate",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "merchantNorm",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "notifyDays",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": "'3,1'",
+        "pk": 0
+      },
+      {
+        "name": "paused",
+        "type": "BOOLEAN",
+        "notnull": 1,
+        "default": "false",
+        "pk": 0
+      },
+      {
+        "name": "payment",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "startDate",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "Category",
+        "from": "categoryId",
+        "to": "id",
+        "on_delete": "SET NULL",
+        "on_update": "CASCADE"
+      },
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": []
+  },
+  "RecurringOccurrence": {
+    "columns": [
+      {
+        "name": "dueDate",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "matchedAmount",
+        "type": "INTEGER",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "ruleId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "status",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "transactionId",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "RecurringRule",
+        "from": "ruleId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      },
+      {
+        "table": "Transaction",
+        "from": "transactionId",
+        "to": "id",
+        "on_delete": "SET NULL",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "RecurringOccurrence_ruleId_dueDate_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "ruleId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "dueDate",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "RecurringOccurrence_transactionId_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "transactionId",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "RecurringDismissal": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "merchantNorm",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "until",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "RecurringDismissal_userId_merchantNorm_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "merchantNorm",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "Budget": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "livingAmount",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "month",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "Budget_userId_month_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "month",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "Notification": {
+    "columns": [
+      {
+        "name": "body",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "createdAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": "CURRENT_TIMESTAMP",
+        "pk": 0
+      },
+      {
+        "name": "href",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "key",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "readAt",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "type",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "Notification_userId_key_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "key",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "Session": {
+    "columns": [
+      {
+        "name": "createdAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": "CURRENT_TIMESTAMP",
+        "pk": 0
+      },
+      {
+        "name": "expiresAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "tokenHash",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "Session_expiresAt_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "expiresAt",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "Session_userId_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "AuthRateLimit": {
+    "columns": [
+      {
+        "name": "attempts",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": "0",
+        "pk": 0
+      },
+      {
+        "name": "expiresAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "key",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      }
+    ],
+    "foreignKeys": [],
+    "indexes": [
+      {
+        "name": "AuthRateLimit_expiresAt_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "expiresAt",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "NotificationPreference": {
+    "columns": [
+      {
+        "name": "codeAttempts",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": "0",
+        "pk": 0
+      },
+      {
+        "name": "codeExpiresAt",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "codeHash",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "emailEnabled",
+        "type": "BOOLEAN",
+        "notnull": 1,
+        "default": "false",
+        "pk": 0
+      },
+      {
+        "name": "emailEnabledAt",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "emailVerifiedAddress",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "requestAt",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "requestCount",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": "0",
+        "pk": 0
+      },
+      {
+        "name": "requestWindow",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": []
+  },
+  "PushSubscription": {
+    "columns": [
+      {
+        "name": "auth",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "createdAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": "CURRENT_TIMESTAMP",
+        "pk": 0
+      },
+      {
+        "name": "endpoint",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "p256dh",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "PushSubscription_endpoint_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "endpoint",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "PushSubscription_userId_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "NotificationBatch": {
+    "columns": [
+      {
+        "name": "cutoff",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "expiresAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "slot",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "userId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "User",
+        "from": "userId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "NotificationBatch_userId_cutoff_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "cutoff",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "NotificationBatch_userId_slot_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "userId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "slot",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  },
+  "NotificationDelivery": {
+    "columns": [
+      {
+        "name": "attempts",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": "0",
+        "pk": 0
+      },
+      {
+        "name": "batchId",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "channel",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "count",
+        "type": "INTEGER",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "errorCode",
+        "type": "TEXT",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 1
+      },
+      {
+        "name": "retryAt",
+        "type": "DATETIME",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "sentAt",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "startedAt",
+        "type": "DATETIME",
+        "notnull": 0,
+        "default": null,
+        "pk": 0
+      },
+      {
+        "name": "status",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": "'READY'",
+        "pk": 0
+      },
+      {
+        "name": "target",
+        "type": "TEXT",
+        "notnull": 1,
+        "default": null,
+        "pk": 0
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "NotificationBatch",
+        "from": "batchId",
+        "to": "id",
+        "on_delete": "CASCADE",
+        "on_update": "CASCADE"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "NotificationDelivery_batchId_channel_target_key",
+        "unique": 1,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "batchId",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "channel",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "target",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      },
+      {
+        "name": "NotificationDelivery_status_retryAt_idx",
+        "unique": 0,
+        "partial": 0,
+        "columns": [
+          {
+            "name": "status",
+            "coll": "BINARY",
+            "desc": 0
+          },
+          {
+            "name": "retryAt",
+            "coll": "BINARY",
+            "desc": 0
+          }
+        ]
+      }
+    ]
+  }
+}

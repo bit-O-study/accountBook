@@ -2,8 +2,10 @@ import Link from "next/link";
 import { markAllReadAction } from "@/app/actions";
 import { ActionButton } from "@/components/buttons";
 import { Icon, type IconName } from "@/components/Icon";
-import { getUser, prisma } from "@/lib/db";
+import { getUser, loadNotifications } from "@/lib/server/data";
 import { kstDateStr, kstTimeStr, shortDate, todayStr } from "@/lib/dates";
+import { NotificationSettings } from "@/components/NotificationSettings";
+import { query } from "@/lib/server/gateway";
 
 const TYPE: Record<string, { icon: IconName; link: string }> = {
   DUE: { icon: "calendar", link: "고정지출 보기" },
@@ -22,12 +24,9 @@ function when(d: Date, today: string): string {
 export default async function NotificationsPage() {
   const user = await getUser();
   const today = todayStr();
-  const list = await prisma.notification.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
-    take: 100,
-  });
+  const list = await loadNotifications(user.id);
   const unread = list.filter((n) => !n.readAt).length;
+  const settings = await query("loadNotificationSettings");
 
   return (
     <div className="page" style={{ maxWidth: 760 }}>
@@ -42,6 +41,7 @@ export default async function NotificationsPage() {
         )}
       </div>
 
+      <NotificationSettings settings={settings} />
       <section className="card pad">
         {list.length === 0 ? (
           <div className="empty">
@@ -78,7 +78,7 @@ export default async function NotificationsPage() {
           </div>
         )}
       </section>
-      <p className="faint" style={{ fontSize: 12.5 }}>지금은 앱 안에서만 알려드려요. 휴대폰 푸시와 이메일 알림은 다음 단계에서 추가돼요.</p>
+      <p className="faint" style={{ fontSize: 12.5 }}>앱 안 알림은 수신 설정과 관계없이 여기에서 확인할 수 있어요.</p>
     </div>
   );
 }
